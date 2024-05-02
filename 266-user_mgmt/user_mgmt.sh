@@ -1,7 +1,5 @@
 #!/bin/bash
 
-logfile = 
-
 addUser(){
 	username = $1
 	password = $2
@@ -37,7 +35,7 @@ printUser()
 {
 	username = $1
 	userInfo = $(grep "^username:" /etc/passwd)
-	if[-z "$userInfo"]; then
+	if [-z "$userInfo"]; then
 		echo "That user does not exist"
 	else
 		echo "UID: $(echo "$userInfo" | cut -d: -f3)"
@@ -47,4 +45,13 @@ printUser()
 	fi
 }
 
+if [ "$1" == "create" ]; then
+	addUser $2 $3 $4 $5
+fi
 
+if [ "$1" == "delete" ]; then
+	deleteUser $2 $3
+fi
+if [ "$1" == "info" ]; then
+	deleteUser $2
+fi
