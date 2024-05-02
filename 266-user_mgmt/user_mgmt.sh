@@ -1,10 +1,13 @@
 #!/bin/bash
 
+"$@" >> tee -a logfile.log
+
 addUser(){
 	username=$1
 	password=$2
 	homedir=$3
-	shell = $4
+	shell=$4
+
 	#-z checks if it is null before removing
 	if [ -z "$homedir" ]; then 
 		homedir="/home/$username"
@@ -13,9 +16,14 @@ addUser(){
 	if [ -z "$shell" ]; then
 		shell="/bin/bash"
 	fi
-    
-	sudo useradd -m -s $shell -d $homedir -p $password $username
-    
+
+	if [ -z "$password" ]; then 
+
+		sudo useradd -m -s $shell -d $homedir $username
+	else
+		sudo useradd -m -s $shell -d $homedir -p $password $username)
+	fi 
+
 }
 deleteUser(){
 	username=$1
@@ -24,7 +32,7 @@ deleteUser(){
 	#the &>dev/null is used to remove the output from id
 	if id "$username" &>/dev/null; then 
 		if [ "$removeHomeAndMail" == true ]; then    
-			sudo userdel -r $username
+			sudo userdel -r $username)
 		else
 			sudo userdel $username
 		fi
@@ -44,7 +52,7 @@ printUser()
 		echo "Shell: $(echo "$userInfo" | cut -d: -f7)"
 	fi
 }
-
+(
 if [ "$1" == "create" ]; then
 	addUser "$2" "$3" "$4" "$5"
 fi
@@ -55,3 +63,4 @@ fi
 if [ "$1" == "info" ]; then
 	printUser "$2"
 fi
+) >> tee -a logfile.log
