@@ -7,8 +7,8 @@ addUser(){
 	password = $2
 	homedir = $3
 	shell = $4
-
-	if [-z "$homedir"]; then
+	#-z checks if it is null before removing
+	if [-z "$homedir"]; then 
 		homedir = "/home/$username"
 	fi    
 
@@ -22,7 +22,9 @@ addUser(){
 deleteUser(){
 	username = $1
 	removeHomeAndMail = $2
-	if id "$username" &>/dev/null; then #the &>dev/null is used to remove the output from id
+	
+	#the &>dev/null is used to remove the output from id
+	if id "$username" &>/dev/null; then 
 		if ["$removeHomeAndMail" == true]; then    
 			sudo userdel -r $username
 		else
@@ -30,12 +32,19 @@ deleteUser(){
 		fi
 	fi
 }
+
 printUser()
 {
 	username = $1
-	
-
-
+	userInfo = $(grep "^username:" /etc/passwd)
+	if[-z "$userInfo"]; then
+		echo "That user does not exist"
+	else
+		echo "UID: $(echo "$userInfo" | cut -d: -f3)"
+		echo "GID: $(echo "$userInfo" | cut -d: -f3)"
+		echo "Home Dir: $(echo "$userInfo" | cut -d: -f6)"
+		echo "Shell: $(echo "$userInfo" | cut -d: -f7)"
+	fi
 }
 
 
