@@ -1,1 +1,39 @@
-
+----------------------
+Input: create dave
+User was added successfully
+----------------------
+Input: info dave
+UID: 1000
+GID: 1000
+Home Dir: /home/dave
+Shell: /bin/bash
+----------------------
+Input: delete dave true
+User was deleted successfully
+----------------------
+Input: create dave password
+User was added successfully
+----------------------
+Input: create dave password
+User was not added successfully #the user already exists!
+----------------------
+Input: info dave
+UID: 1000
+GID: 1000
+Home Dir: /home/dave
+Shell: /bin/bash
+----------------------
+Input: delete dave true
+User was deleted successfully
+----------------------
+Input: create dave
+User was added successfully
+----------------------
+Input: delete dave
+User was deleted successfully
+----------------------
+Input: create dave
+User was added successfully
+----------------------
+Input: delete dave
+User was deleted successfully

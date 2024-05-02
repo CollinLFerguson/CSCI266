@@ -1,6 +1,6 @@
 #!/bin/bash
-
-"$@" >> tee -a logfile.log
+echo "----------------------" | tee -a logfile.log
+echo "Input: $@" | tee -a logfile.log
 
 addUser(){
 	username=$1
@@ -21,8 +21,13 @@ addUser(){
 
 		sudo useradd -m -s $shell -d $homedir $username
 	else
-		sudo useradd -m -s $shell -d $homedir -p $password $username)
+		sudo useradd -m -s $shell -d $homedir -p $password $username
 	fi 
+    if [ $? -eq 0 ]; then
+        echo "User was added successfully"
+    else
+        echo "User was not added successfully"
+    fi
 
 }
 deleteUser(){
@@ -32,11 +37,18 @@ deleteUser(){
 	#the &>dev/null is used to remove the output from id
 	if id "$username" &>/dev/null; then 
 		if [ "$removeHomeAndMail" == true ]; then    
-			sudo userdel -r $username)
+			sudo userdel -r $username
 		else
 			sudo userdel $username
 		fi
 	fi
+    
+    if [ $? -eq 0 ]; then
+        echo "User was deleted successfully"
+    else
+        echo "User was not deleted successfully"
+    fi
+
 }
 
 printUser()
@@ -52,15 +64,13 @@ printUser()
 		echo "Shell: $(echo "$userInfo" | cut -d: -f7)"
 	fi
 }
-(
 if [ "$1" == "create" ]; then
-	addUser "$2" "$3" "$4" "$5"
+	addUser "$2" "$3" "$4" "$5" | tee -a logfile.log
 fi
 
 if [ "$1" == "delete" ]; then
-	deleteUser "$2" "$3"
+	deleteUser "$2" "$3" | tee -a logfile.log
 fi
 if [ "$1" == "info" ]; then
-	printUser "$2"
+	printUser "$2" | tee -a logfile.log
 fi
-) >> tee -a logfile.log
